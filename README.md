@@ -9,8 +9,11 @@
 - [ ] Skin cache
 - [ ] Sync Skin Grab
 - [ ] God Mode
-- [ ] Gamemode
+- [ ] Gamemode Command
 - [ ] Holograms
+- [ ] Scoreboard Side Bar
+- [ ] Multiple Server Version Support
+- [ ] Multiple Client Version Support
 - [ ] NPC (May Not Do It
 - [ ] ~~Code Everything From Essentials~~
 
