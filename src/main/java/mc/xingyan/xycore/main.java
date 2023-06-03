@@ -76,6 +76,8 @@ public final class main extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new JoinQuitMessage(), this);
         this.getServer().getPluginManager().registerEvents(new TabName(), this);
         this.getServer().getPluginManager().registerEvents(new Chat(), this);
+        this.getServer().getPluginManager().registerEvents(new ScoreBoard(), this);
+        this.getServer().getPluginManager().registerEvents(new lightning_stick(), this);
 
 
         this.getCommand("setrank").setExecutor(new setRank());
@@ -91,6 +93,7 @@ public final class main extends JavaPlugin {
         this.getCommand("fly").setExecutor(new fly());
         this.getCommand("lunar").setExecutor(new lunar());
         this.getCommand("test").setExecutor(new test());
+        this.getCommand("lightning_stick").setExecutor(new lightning_stick());
 
         this.getCommand("item").setTabCompleter(new mc.xingyan.xycore.TabComplete.item());
 

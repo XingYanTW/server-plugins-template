@@ -38,7 +38,6 @@ public class test implements CommandExecutor {
                 PlayerConnection cp = ((CraftPlayer) players).getHandle().playerConnection;
                 cp.sendPacket(new PacketPlayOutEntityDestroy(stand.getId()));
             });
-
         }
 
 

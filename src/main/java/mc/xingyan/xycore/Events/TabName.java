@@ -27,11 +27,6 @@ public class TabName implements Listener {
         String prefix = playerinfo.getprefix(player);
         player.setPlayerListName(prefix+player.getName());
         Scoreboard score = Bukkit.getScoreboardManager().getMainScoreboard();
-        Team t = score.getTeam("nhide");
-        if(t == null) {
-            t = score.registerNewTeam("nhide");
-            t.setNameTagVisibility(NameTagVisibility.NEVER);
-        }
 
 
 
@@ -74,8 +69,8 @@ public class TabName implements Listener {
                 break;
         }
         //t.addEntry(player.getName());
-
         player.setScoreboard(score);
+
         Location loc = player.getLocation();
         WorldServer ws = ((CraftWorld) player.getWorld()).getHandle();
         EntityArmorStand stand = new EntityArmorStand(ws);

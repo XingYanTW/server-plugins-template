@@ -29,3 +29,5 @@ commands:
     usage: /<command>
   lunar:
     usage: /<command>
+  lightning_stick:
+    usage: /<command>

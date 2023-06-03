@@ -38,4 +38,19 @@ public class playerinfo {
         return rank;
     }
 
+    public static String getrankcolor(Player player){
+        String rank = getrank(player);
+        switch (rank){
+            case "DEFAULT":
+                return ChatColor.GRAY+"Default";
+            case "ADMIN":
+                return ChatColor.RED+"ADMIN";
+            case "YOUTUBER":
+                return ChatColor.RESET+"YOUTUBER";
+            case "MODERATOR":
+                return ChatColor.DARK_GREEN+"MODERATOR";
+        }
+        return rank;
+    }
+
 }
