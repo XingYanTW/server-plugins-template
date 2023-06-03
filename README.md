@@ -12,6 +12,7 @@
 - [ ] Gamemode
 - [ ] Holograms
 - [ ] NPC (May Not Do It
+- [ ] ~~Code Everything From Essentials~~
 
 # Command List
 - /setrank
