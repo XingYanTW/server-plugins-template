@@ -11,7 +11,7 @@
 - [ ] God Mode
 - [ ] Gamemode Command
 - [ ] Holograms
-- [ ] Scoreboard Side Bar
+- [X] Scoreboard Side Bar
 - [ ] Multiple Server Version Support
 - [ ] Multiple Client Version Support
 - [ ] NPC (May Not Do It
