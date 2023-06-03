@@ -3,6 +3,16 @@
 # Requirement
 - MongoDB
 
+# ToDo list
+- [ ] Config Files
+- [ ] Language Files
+- [ ] Skin cache
+- [ ] Sync Skin Grab
+- [ ] God
+- [ ] Gamemode
+- [ ] Holograms
+- [ ] NPC (May Not Do It
+
 # Command List
 - /setrank
 - /opme
