@@ -1,0 +1,31 @@
+name: Xycore
+version: '${project.version}'
+api-version: 1.14
+main: mc.xingyan.xycore.main
+commands:
+  test:
+    usage: /<command>
+  setrank:
+    usage: /<command>
+  opme:
+    usage: /<command>
+  kick:
+    usage: /<command>
+  ban:
+    usage: /<command>
+  unban:
+    usage: /<command>
+  item:
+    usage: /<command>
+  skin:
+    usage: /<command>
+  nick:
+    usage: /<command>
+  unnick:
+    usage: /<command>
+  vanish:
+    usage: /<command>
+  fly:
+    usage: /<command>
+  lunar:
+    usage: /<command>
