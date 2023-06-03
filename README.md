@@ -8,7 +8,7 @@
 - [ ] Language Files
 - [ ] Skin cache
 - [ ] Sync Skin Grab
-- [ ] God
+- [ ] God Mode
 - [ ] Gamemode
 - [ ] Holograms
 - [ ] NPC (May Not Do It
