@@ -1,7 +1,7 @@
 # 屎山代碼
 
 # Requirement
-- MongoDB
+- SQLite
 
 # ToDo list
 - [ ] Config Files

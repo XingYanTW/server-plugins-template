@@ -1,7 +1,7 @@
-name: Xycore
+name: ServerCore
 version: '${project.version}'
 api-version: 1.21
-main: mc.xingyan.xycore.XyCore
+main: mc.xingyan.servercore.ServerCore
 commands:
   test:
     usage: /<command>
