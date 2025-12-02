@@ -1,18 +1,15 @@
-package mc.xingyan.xycore.Commands;
+package mc.xingyan.xycore.commands;
 
+import com.comphenix.protocol.wrappers.WrappedGameProfile;
+import com.comphenix.protocol.wrappers.WrappedSignedProperty;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
+import mc.xingyan.xycore.XyCore;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 import org.json.simple.JSONObject;
@@ -21,15 +18,20 @@ import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-import static mc.xingyan.xycore.getrank.getrank;
+import static mc.xingyan.xycore.RankManager.getRank;
 
-public class skin implements CommandExecutor {
+public class SkinCommand extends XyCommand {
+
+    @Override
+    public String getName() {
+        return "skin";
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if(getrank(player).equals("YOUTUBER") || getrank(player).equals("MODERATOR") || getrank(player).equals("ADMIN")){
+            if(getRank(player).equals("YOUTUBER") || getRank(player).equals("MODERATOR") || getRank(player).equals("ADMIN")){
                 if (args.length >= 1) {
                     if (args[0].equals("remove")) {
 
@@ -45,7 +47,7 @@ public class skin implements CommandExecutor {
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                        chageskin((Player) sender, texture, signature);
+                        changeSkin((Player) sender, texture, signature);
 
                     }else{
                         try {
@@ -59,7 +61,7 @@ public class skin implements CommandExecutor {
                             JsonObject property = new JsonParser().parse(reader2).getAsJsonObject().get("properties").getAsJsonArray().get(0).getAsJsonObject();
                             String texture = property.get("value").getAsString();
                             String signature = property.get("signature").getAsString();
-                            chageskin((Player) sender, texture, signature);
+                            changeSkin((Player) sender, texture, signature);
                             player.sendMessage(ChatColor.GREEN+"You has changed your skin to "+name);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
@@ -77,16 +79,17 @@ public class skin implements CommandExecutor {
         return true;
     }
 
-    private void chageskin(Player sender, String texture, String signature) {
+    private void changeSkin(Player sender, String texture, String signature) {
         Player player = sender;
-        PlayerConnection cp = ((CraftPlayer) player).getHandle().playerConnection;
-        GameProfile gp = ((CraftPlayer) player).getHandle().getProfile();
+        WrappedGameProfile profile = WrappedGameProfile.fromPlayer(player);
+        profile.getProperties().removeAll("textures");
+        profile.getProperties().put("textures", new WrappedSignedProperty("textures", texture, signature));
 
-        cp.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer) player).getHandle()));
-        gp.getProperties().removeAll("textures");
-        gp.getProperties().put("textures", new Property("textures", texture, signature));
+        Bukkit.getOnlinePlayers().forEach(p -> {
+            p.hidePlayer(XyCore.plugin, player);
+            p.showPlayer(XyCore.plugin, player);
+        });
 
-        cp.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) player).getHandle()));
         Location loc = player.getLocation();
         int food = player.getFoodLevel();
         double heal = player.getHealth();
@@ -98,11 +101,6 @@ public class skin implements CommandExecutor {
         player.getInventory().setContents(inv.getContents());
         player.setHealth(heal);
         player.setFoodLevel(food);
-        Bukkit.getOnlinePlayers().forEach(p -> {
-            PlayerConnection pcp = ((CraftPlayer)p).getHandle().playerConnection;
-            pcp.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer) player).getHandle()));
-            pcp.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) player).getHandle()));
-        });
     }
 
     private static String readAll(Reader rd) throws IOException {

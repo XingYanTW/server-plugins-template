@@ -1,7 +1,6 @@
-package mc.xingyan.xycore.Events;
+package mc.xingyan.xycore.events;
 
-import com.lunarclient.bukkitapi.LunarClientAPI;
-import mc.xingyan.xycore.Stasis.playerinfo;
+import mc.xingyan.xycore.stasis.PlayerInfo;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,25 +13,17 @@ public class JoinQuitMessage implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
-        String prefix = playerinfo.getprefix(player);
+        String prefix = PlayerInfo.getPrefix(player);
 
-        if(LunarClientAPI.getInstance().isRunningLunarClient(player)){
-            event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', "&7[&rLunar&7][&a+&7] "+ prefix+player.getName()));
-        }else{
-            event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', "&7[&a+&7] "+ prefix+player.getName()));
-        }
+        event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', "&7[&a+&7] "+ prefix+player.getName()));
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event){
         Player player = event.getPlayer();
-        String prefix = playerinfo.getprefix(player);
+        String prefix = PlayerInfo.getPrefix(player);
 
-        if(LunarClientAPI.getInstance().isRunningLunarClient(player)){
-            event.setQuitMessage(ChatColor.translateAlternateColorCodes('&', "&7[&rLunar&7][&c-&7] "+ prefix+player.getName()));
-        }else{
-            event.setQuitMessage(ChatColor.translateAlternateColorCodes('&', "&7[&c-&7] "+ prefix+player.getName()));
-        }
+        event.setQuitMessage(ChatColor.translateAlternateColorCodes('&', "&7[&c-&7] "+ prefix+player.getName()));
     }
 
 }

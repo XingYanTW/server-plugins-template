@@ -1,4 +1,4 @@
-package mc.xingyan.xycore.Commands;
+package mc.xingyan.xycore.commands;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -16,7 +16,12 @@ import org.bukkit.entity.Player;
 
 import java.util.Locale;
 
-public class setRank implements CommandExecutor {
+public class SetRankCommand extends XyCommand {
+
+    @Override
+    public String getName() {
+        return "setrank";
+    }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof ConsoleCommandSender){

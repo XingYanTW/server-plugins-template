@@ -1,36 +1,31 @@
-package mc.xingyan.xycore.Stasis;
+package mc.xingyan.xycore.stasis;
 
-import com.mojang.authlib.GameProfile;
-import net.minecraft.server.v1_8_R3.EntityPlayer;
-import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
+import com.comphenix.protocol.wrappers.WrappedGameProfile;
+import mc.xingyan.xycore.XyCore;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.lang.reflect.Field;
 
-public class changeNick {
+public class ChangeNick {
 
-    public changeNick(String name, Player player) {
-        Field ff;
+    public ChangeNick(String nick, Player player) {
         try {
-            EntityPlayer ep = ((CraftPlayer) player).getHandle();
-            GameProfile playerProfile = ep.getProfile();
-            ff = playerProfile.getClass().getDeclaredField("name");
-            ff.setAccessible(true);
-            ff.set(playerProfile, name);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+            WrappedGameProfile profile = WrappedGameProfile.fromPlayer(player);
+            Field nameField = profile.getHandle().getClass().getDeclaredField("name");
+            nameField.setAccessible(true);
+            nameField.set(profile.getHandle(), nick);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
         Bukkit.getOnlinePlayers().forEach(p -> {
-            PlayerConnection pcp = ((CraftPlayer)p).getHandle().playerConnection;
-            pcp.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, ((CraftPlayer) player).getHandle()));
-            pcp.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, ((CraftPlayer) player).getHandle()));
+            p.hidePlayer(XyCore.plugin, player);
+            p.showPlayer(XyCore.plugin, player);
         });
+        
         Location loc = player.getLocation();
         int food = player.getFoodLevel();
         double heal = player.getHealth();

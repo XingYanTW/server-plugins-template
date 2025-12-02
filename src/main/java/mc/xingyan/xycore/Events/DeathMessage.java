@@ -1,4 +1,4 @@
-package mc.xingyan.xycore.Events;
+package mc.xingyan.xycore.events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

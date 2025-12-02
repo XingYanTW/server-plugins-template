@@ -1,7 +1,7 @@
 name: Xycore
 version: '${project.version}'
-api-version: 1.14
-main: mc.xingyan.xycore.main
+api-version: 1.21
+main: mc.xingyan.xycore.XyCore
 commands:
   test:
     usage: /<command>
@@ -26,8 +26,6 @@ commands:
   vanish:
     usage: /<command>
   fly:
-    usage: /<command>
-  lunar:
     usage: /<command>
   lightning_stick:
     usage: /<command>

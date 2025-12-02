@@ -1,21 +1,26 @@
-package mc.xingyan.xycore.Commands;
+package mc.xingyan.xycore.commands;
 
-import mc.xingyan.xycore.Stasis.changeNick;
-import mc.xingyan.xycore.main;
+import mc.xingyan.xycore.stasis.ChangeNick;
+import mc.xingyan.xycore.XyCore;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static mc.xingyan.xycore.getrank.getrank;
+import static mc.xingyan.xycore.RankManager.getRank;
 
-public class fly implements CommandExecutor {
+public class FlyCommand extends XyCommand {
+
+    @Override
+    public String getName() {
+        return "fly";
+    }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player){
             Player player = (Player) sender;
-            if(getrank(player).equals("YOUTUBER") || getrank(player).equals("MODERATOR") || getrank(player).equals("ADMIN")){
+            if(getRank(player).equals("YOUTUBER") || getRank(player).equals("MODERATOR") || getRank(player).equals("ADMIN")){
                 if(player.getAllowFlight()){
                     player.setAllowFlight(false);
                     player.sendMessage(ChatColor.RED+"Flying Disabled");

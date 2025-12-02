@@ -13,7 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UPGRADEABLE_SWORD implements Listener {
+public class UpgradeableSword implements Listener {
 
     static ItemStack item = null;
 

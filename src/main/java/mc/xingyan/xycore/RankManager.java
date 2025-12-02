@@ -7,10 +7,10 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bukkit.entity.Player;
 
-public class getrank {
+public class RankManager {
 
 
-    public static String getrank(Player player) {
+    public static String getRank(Player player) {
         String uri = "mongodb://localhost:27017";
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("xycore");

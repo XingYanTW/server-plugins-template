@@ -1,8 +1,8 @@
-package mc.xingyan.xycore.Stasis;
+package mc.xingyan.xycore.stasis;
 
 public class VowelConsonant {
 
-    public static String VowelConsonant(String string) {
+    public static String getArticle(String string) {
 
         switch (string.toLowerCase().charAt(0)) {
             case 'a':

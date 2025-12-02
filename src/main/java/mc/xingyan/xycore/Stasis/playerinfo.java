@@ -1,4 +1,4 @@
-package mc.xingyan.xycore.Stasis;
+package mc.xingyan.xycore.stasis;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -8,9 +8,9 @@ import org.bson.Document;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class playerinfo {
+public class PlayerInfo {
 
-    public static String getrank(Player player) {
+    public static String getRank(Player player) {
         String uri = "mongodb://localhost:27017";
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("xycore");
@@ -23,8 +23,8 @@ public class playerinfo {
         }
     }
 
-    public static String getprefix(Player player){
-        String rank = getrank(player);
+    public static String getPrefix(Player player){
+        String rank = getRank(player);
         switch (rank){
             case "DEFAULT":
                 return ChatColor.GRAY+"";
@@ -38,8 +38,8 @@ public class playerinfo {
         return rank;
     }
 
-    public static String getrankcolor(Player player){
-        String rank = getrank(player);
+    public static String getRankColor(Player player){
+        String rank = getRank(player);
         switch (rank){
             case "DEFAULT":
                 return ChatColor.GRAY+"Default";

@@ -1,4 +1,4 @@
-package mc.xingyan.xycore.Commands;
+package mc.xingyan.xycore.commands;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -12,9 +12,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import static mc.xingyan.xycore.getrank.getrank;
+import static mc.xingyan.xycore.RankManager.getRank;
 
-public class unban implements CommandExecutor {
+public class UnbanCommand extends XyCommand {
+
+    @Override
+    public String getName() {
+        return "unban";
+    }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof ConsoleCommandSender) {
@@ -29,7 +34,7 @@ public class unban implements CommandExecutor {
         }
         if(sender instanceof Player) {
             Player player = (Player) sender;
-            if (getrank(player).equals("MODERATOR") || getrank(player).equals("ADMIN")) {
+            if (getRank(player).equals("MODERATOR") || getRank(player).equals("ADMIN")) {
                 if(args.length>=1){
                     if(checkban(args[0])){
                         removeban(args[0]);

@@ -29,7 +29,6 @@
 - /unnick
 - /vanish
 - /fly
-- /lunar
 
 # Event List
 - PlayerFirstJoin()

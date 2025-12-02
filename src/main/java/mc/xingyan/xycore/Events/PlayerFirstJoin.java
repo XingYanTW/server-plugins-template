@@ -1,4 +1,4 @@
-package mc.xingyan.xycore.Events;
+package mc.xingyan.xycore.events;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.*;

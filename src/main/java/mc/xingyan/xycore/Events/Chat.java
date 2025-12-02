@@ -1,6 +1,6 @@
-package mc.xingyan.xycore.Events;
+package mc.xingyan.xycore.events;
 
-import mc.xingyan.xycore.Stasis.playerinfo;
+import mc.xingyan.xycore.stasis.PlayerInfo;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,7 +12,7 @@ public class Chat implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event){
         Player player = event.getPlayer();
-        String prefix = playerinfo.getprefix(player);
+        String prefix = PlayerInfo.getPrefix(player);
         event.setFormat(prefix+player.getDisplayName()+ ChatColor.RESET+": "+event.getMessage());
     }
 

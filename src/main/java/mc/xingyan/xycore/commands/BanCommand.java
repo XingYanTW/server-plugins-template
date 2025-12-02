@@ -1,4 +1,4 @@
-package mc.xingyan.xycore.Commands;
+package mc.xingyan.xycore.commands;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
@@ -18,9 +18,14 @@ import org.bukkit.entity.Player;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
-import static mc.xingyan.xycore.getrank.getrank;
+import static mc.xingyan.xycore.RankManager.getRank;
 
-public class ban implements CommandExecutor {
+public class BanCommand extends XyCommand {
+
+    @Override
+    public String getName() {
+        return "ban";
+    }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -28,7 +33,7 @@ public class ban implements CommandExecutor {
 
         if(sender instanceof Player){
             Player player = (Player) sender;
-            if(getrank(player).equals("MODERATOR") || getrank(player).equals("ADMIN")){
+            if(getRank(player).equals("MODERATOR") || getRank(player).equals("ADMIN")){
                 if(args.length>=1){
                     if(Bukkit.getPlayer(args[0]) !=null ){
                         Player target = Bukkit.getPlayer(args[0]);
