@@ -12,6 +12,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,6 +44,22 @@ public class ScoreBoard implements Listener {
         Objective obj = scoreboard.registerNewObjective(player.getName(), "dummy");
         obj.setDisplayName(ChatColor.GOLD+"Example Server");
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            String weight = "999";
+            switch(PlayerInfo.getRank(p)){
+                case "ADMIN": weight = "000"; break;
+                case "MODERATOR": weight = "001"; break;
+                case "YOUTUBER": weight = "002"; break;
+                default: weight = "999"; break;
+            }
+
+            String teamName = weight + p.getName();
+            Team team = scoreboard.registerNewTeam(teamName);
+            team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+            team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
+            team.addEntry(p.getName());
+        }
 
         Score s1 = obj.getScore(ChatColor.GRAY+ft.format(date));
         s1.setScore(10);
