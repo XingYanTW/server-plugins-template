@@ -54,7 +54,11 @@ public class SetRankCommand extends CoreCommand {
                     }else{
                         sender.sendMessage(ChatColor.RED+"Rank Not Found!");
                     }
+                } else {
+                    sender.sendMessage(ChatColor.RED+"Player Not Found!");
                 }
+            } else {
+                sender.sendMessage(ChatColor.RED+"Usage: /setrank <player> <rank>");
             }
 
         }
@@ -79,7 +83,11 @@ public class SetRankCommand extends CoreCommand {
                                     }else{
                                         sender.sendMessage(ChatColor.RED+"Rank Not Found!");
                                     }
+                                } else {
+                                    sender.sendMessage(ChatColor.RED+"Player Not Found!");
                                 }
+                            } else {
+                                sender.sendMessage(ChatColor.RED+"Usage: /setrank <player> <rank>");
                             }
                         }else{
                             sender.sendMessage(ChatColor.RED+"You don't have permission to run that command!");
@@ -106,4 +114,5 @@ public class SetRankCommand extends CoreCommand {
         }
     }
 }
+
 

@@ -4,28 +4,28 @@ api-version: 1.21
 main: mc.xingyan.servercore.ServerCore
 commands:
   test:
-    usage: /<command>
+    usage: /test
   setrank:
-    usage: /<command>
+    usage: /setrank <player> <rank>
   opme:
-    usage: /<command>
+    usage: /opme
   kick:
-    usage: /<command>
+    usage: /kick <player> [reason]
   ban:
-    usage: /<command>
+    usage: /ban <player> [reason]
   unban:
-    usage: /<command>
+    usage: /unban <player>
   item:
-    usage: /<command>
+    usage: /item <item> [amount]
   skin:
-    usage: /<command>
+    usage: /skin <player_name>|remove
   nick:
-    usage: /<command>
+    usage: /nick <nickname>
   unnick:
-    usage: /<command>
+    usage: /unnick
   vanish:
-    usage: /<command>
+    usage: /vanish
   fly:
-    usage: /<command>
+    usage: /fly
   lightning_stick:
-    usage: /<command>
+    usage: /lightning_stick

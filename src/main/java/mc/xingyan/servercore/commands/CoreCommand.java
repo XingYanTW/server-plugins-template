@@ -6,3 +6,4 @@ public abstract class CoreCommand implements CommandExecutor {
     public abstract String getName();
 }
 
+

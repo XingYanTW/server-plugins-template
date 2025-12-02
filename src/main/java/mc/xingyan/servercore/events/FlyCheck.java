@@ -5,7 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import static mc.xingyan.ServerCore.RankManager.getRank;
+import static mc.xingyan.servercore.RankManager.getRank;
 
 public class FlyCheck implements Listener {
 
@@ -17,4 +17,5 @@ public class FlyCheck implements Listener {
         }
     }
 }
+
 

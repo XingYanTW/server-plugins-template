@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
-import static mc.xingyan.ServerCore.RankManager.getRank;
+import static mc.xingyan.servercore.RankManager.getRank;
 
 public class KickCommand extends CoreCommand {
 
@@ -72,4 +72,5 @@ public class KickCommand extends CoreCommand {
         return true;
     }
 }
+
 

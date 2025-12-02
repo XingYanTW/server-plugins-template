@@ -8,7 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static mc.xingyan.ServerCore.RankManager.getRank;
+import static mc.xingyan.servercore.RankManager.getRank;
 
 
 public class NickCommand extends CoreCommand {
@@ -42,6 +42,8 @@ public class NickCommand extends CoreCommand {
                     }else{
                         player.sendMessage(ChatColor.RED+"Nickname can't longer than 16 charters.");
                     }
+                } else {
+                    player.sendMessage(ChatColor.RED+"Usage: /nick <nickname>");
                 }
             }else{
                 sender.sendMessage(ChatColor.RED+"You Need YOUTUBER rank or higher to do this.");
@@ -51,4 +53,5 @@ public class NickCommand extends CoreCommand {
         return true;
     }
 }
+
 

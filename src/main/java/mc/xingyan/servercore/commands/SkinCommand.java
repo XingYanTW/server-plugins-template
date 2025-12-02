@@ -18,7 +18,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-import static mc.xingyan.ServerCore.RankManager.getRank;
+import static mc.xingyan.servercore.RankManager.getRank;
 
 public class SkinCommand extends CoreCommand {
 
@@ -69,6 +69,8 @@ public class SkinCommand extends CoreCommand {
 
                     }
 
+                } else {
+                    player.sendMessage(ChatColor.RED+"Usage: /skin <player_name>|remove");
                 }
             }else{
                 sender.sendMessage(ChatColor.RED+"You Need YOUTUBER rank or higher to do this.");
@@ -130,4 +132,5 @@ public class SkinCommand extends CoreCommand {
         System.out.println(json.get("id"));
     }
 }
+
 

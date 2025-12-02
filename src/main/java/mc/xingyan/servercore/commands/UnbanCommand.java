@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import mc.xingyan.servercore.ServerCore;
 
-import static mc.xingyan.ServerCore.RankManager.getRank;
+import static mc.xingyan.servercore.RankManager.getRank;
 
 public class UnbanCommand extends CoreCommand {
 
@@ -30,6 +30,8 @@ public class UnbanCommand extends CoreCommand {
                 }else{
                     System.out.println(ChatColor.RED+"Player Not Found.");
                 }
+            } else {
+                sender.sendMessage(ChatColor.RED+"Usage: /unban <player>");
             }
         }
         if(sender instanceof Player) {
@@ -42,6 +44,8 @@ public class UnbanCommand extends CoreCommand {
                     }else{
                         player.sendMessage(ChatColor.RED+"Player Not Found.");
                     }
+                } else {
+                    player.sendMessage(ChatColor.RED+"Usage: /unban <player>");
                 }
             }
         }
@@ -72,4 +76,5 @@ public class UnbanCommand extends CoreCommand {
         }
     }
 }
+
 

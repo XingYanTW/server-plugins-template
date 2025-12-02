@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import mc.xingyan.servercore.ServerCore;
 
-import static mc.xingyan.ServerCore.RankManager.getRank;
+import static mc.xingyan.servercore.RankManager.getRank;
 
 public class BanCommand extends CoreCommand {
 
@@ -105,4 +105,5 @@ public class BanCommand extends CoreCommand {
 
 
 }
+
 

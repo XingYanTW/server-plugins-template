@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
 
-import static mc.xingyan.ServerCore.stasis.VowelConsonant.getArticle;
-import static mc.xingyan.ServerCore.RankManager.getRank;
+import static mc.xingyan.servercore.stasis.VowelConsonant.getArticle;
+import static mc.xingyan.servercore.RankManager.getRank;
 
 public class ItemCommand extends CoreCommand {
 
@@ -28,7 +28,7 @@ public class ItemCommand extends CoreCommand {
             Player player = (Player) sender;
             if(getRank(player).equals("ADMIN")){
                 if (args.length == 0) {
-                    player.sendMessage("Usage: /" + label);
+                    player.sendMessage(ChatColor.RED + "Usage: /item <item> [amount]");
                     return true;
                 }
                 if (args.length >= 1) {
@@ -77,4 +77,5 @@ public class ItemCommand extends CoreCommand {
         return true;
     }
 }
+
 

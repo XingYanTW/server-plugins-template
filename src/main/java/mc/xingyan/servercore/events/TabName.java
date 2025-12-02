@@ -4,8 +4,10 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.InternalStructure;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import com.comphenix.protocol.wrappers.WrappedDataValue;
 import mc.xingyan.servercore.stasis.PlayerInfo;
 import mc.xingyan.servercore.ServerCore;
 import org.bukkit.Bukkit;
@@ -19,7 +21,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.entity.Entity;
+import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -28,6 +36,8 @@ import static mc.xingyan.servercore.ServerCore.armorStandMap;
 import static mc.xingyan.servercore.ServerCore.plugin;
 
 public class TabName implements Listener {
+
+    private final Map<UUID, Integer> tasks = new HashMap<>();
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
@@ -38,92 +48,63 @@ public class TabName implements Listener {
 
 
 
-        Team admin = score.getTeam("000admin");
-        Team mod = score.getTeam("001mod");
-        Team yt = score.getTeam("002yt");
-        Team def = score.getTeam("999def");
-        if(admin == null) {
-            admin = score.registerNewTeam("000admin");
-            admin.setNameTagVisibility(NameTagVisibility.NEVER);
-        }
-        if(mod == null) {
-            mod = score.registerNewTeam("001mod");
-            mod.setNameTagVisibility(NameTagVisibility.NEVER);
-        }
-        if(yt == null) {
-            yt = score.registerNewTeam("002yt");
-            yt.setNameTagVisibility(NameTagVisibility.NEVER);
-        }
-        if(def == null) {
-            def = score.registerNewTeam("999def");
-        }
-        admin.setNameTagVisibility(NameTagVisibility.NEVER);
-        mod.setNameTagVisibility(NameTagVisibility.NEVER);
-        yt.setNameTagVisibility(NameTagVisibility.NEVER);
-        def.setNameTagVisibility(NameTagVisibility.NEVER);
-
+        String weight = "999";
         switch(PlayerInfo.getRank(player)){
-            case "DEFAULT":
-                def.addEntry(player.getName());
-                break;
-            case "ADMIN":
-                admin.addEntry(player.getName());
-                break;
-            case "YOUTUBER":
-                yt.addEntry(player.getName());
-                break;
-            case "MODERATOR":
-                mod.addEntry(player.getName());
-                break;
+            case "ADMIN": weight = "000"; break;
+            case "MODERATOR": weight = "001"; break;
+            case "YOUTUBER": weight = "002"; break;
+            default: weight = "999"; break;
         }
-        //t.addEntry(player.getName());
+
+        String teamName = weight + player.getName();
+        Team team = score.getTeam(teamName);
+        if(team == null) {
+            team = score.registerNewTeam(teamName);
+        }
+        team.setNameTagVisibility(NameTagVisibility.NEVER);
+        team.addEntry(player.getName());
+
         player.setScoreboard(score);
 
         ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
         int entityId = ThreadLocalRandom.current().nextInt();
         ServerCore.armorStandMap.put(player.getName(), entityId);
 
-        Bukkit.getOnlinePlayers().forEach(players -> {
-            if(players.equals(player)) return;
+        for (Player players : new ArrayList<>(Bukkit.getOnlinePlayers())) {
+            if(players.equals(player)) continue;
             sendSpawnPacket(protocolManager, players, player, entityId, prefix + player.getName());
             
             if (armorStandMap.containsKey(players.getName())) {
                 int otherId = armorStandMap.get(players.getName());
                 sendSpawnPacket(protocolManager, player, players, otherId, PlayerInfo.getPrefix(players) + players.getName());
             }
-        });
+        }
 
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+        int taskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             @Override
             public void run() {
-                Location location = player.getLocation();
-                double y = location.getY() - 0.2;
-                if(player.isSneaking()){
-                    y = location.getY() - 0.5;
-                }
-                
-                PacketContainer teleport = protocolManager.createPacket(PacketType.Play.Server.ENTITY_TELEPORT);
-                teleport.getIntegers().write(0, entityId);
-                teleport.getDoubles().write(0, location.getX());
-                teleport.getDoubles().write(1, y);
-                teleport.getDoubles().write(2, location.getZ());
-                teleport.getBytes().write(0, (byte) (location.getYaw() * 256.0F / 360.0F));
-                teleport.getBytes().write(1, (byte) (location.getPitch() * 256.0F / 360.0F));
-                teleport.getBooleans().write(0, false); // onGround
-
-                Bukkit.getOnlinePlayers().forEach(players -> {
-                    if(players.equals(player)) return;
-                    try {
-                        protocolManager.sendServerPacket(players, teleport);
-                    } catch (Exception e) { e.printStackTrace(); }
-                });
+                //sendEntityTeleportPacket(protocolManager, player, entityId);
+                sendEntityTeleportPacket(player, entityId, player.getLocation());
             }
         },0, 0);
+        tasks.put(player.getUniqueId(), taskId);
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event){
         Player player = event.getPlayer();
+        
+        Scoreboard score = Bukkit.getScoreboardManager().getMainScoreboard();
+        for (Team team : score.getTeams()) {
+            if (team.hasEntry(player.getName())) {
+                team.unregister();
+            }
+        }
+        
+        if (tasks.containsKey(player.getUniqueId())) {
+            Bukkit.getScheduler().cancelTask(tasks.get(player.getUniqueId()));
+            tasks.remove(player.getUniqueId());
+        }
         if (ServerCore.armorStandMap.containsKey(player.getName())) {
             int entityId = ServerCore.armorStandMap.get(player.getName());
             ServerCore.armorStandMap.remove(player.getName());
@@ -132,11 +113,11 @@ public class TabName implements Listener {
             PacketContainer destroy = protocolManager.createPacket(PacketType.Play.Server.ENTITY_DESTROY);
             destroy.getIntLists().write(0, java.util.Collections.singletonList(entityId));
             
-            Bukkit.getOnlinePlayers().forEach(players -> {
+            for (Player players : new ArrayList<>(Bukkit.getOnlinePlayers())) {
                 try {
                     protocolManager.sendServerPacket(players, destroy);
                 } catch (Exception e) { e.printStackTrace(); }
-            });
+            }
         }
     }
 
@@ -166,7 +147,12 @@ public class TabName implements Listener {
         // Custom Name Visible
         watcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(3, WrappedDataWatcher.Registry.get(Boolean.class)), true);
         
-        meta.getWatchableCollectionModifier().write(0, watcher.getWatchableObjects());
+        List<WrappedDataValue> wrappedDataValueList = new ArrayList<>();
+        watcher.getWatchableObjects().stream().forEach(entry -> {
+            final WrappedDataWatcher.WrappedDataWatcherObject dataWatcherObject = entry.getWatcherObject();
+            wrappedDataValueList.add(new WrappedDataValue(dataWatcherObject.getIndex(), dataWatcherObject.getSerializer(), entry.getRawValue()));
+        });
+        meta.getDataValueCollectionModifier().write(0, wrappedDataValueList);
         
         try {
             pm.sendServerPacket(target, spawn);
@@ -174,5 +160,72 @@ public class TabName implements Listener {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
+    /*private void sendTeleportPacket(ProtocolManager pm, Player player, int entityId) {
+    Location location = player.getLocation();
+    double y = location.getY() - 0.2;
+    if (player.isSneaking()) {
+        y = location.getY() - 0.5;
+    }
+    
+    try {
+        PacketContainer teleport = pm.createPacket(PacketType.Play.Server.ENTITY_TELEPORT);
+        teleport.getIntegers().write(0, entityId);
+        teleport.getDoubles().write(0, location.getX());
+        teleport.getDoubles().write(1, y);
+        teleport.getDoubles().write(2, location.getZ());
+        teleport.getBytes().write(0, (byte) (location.getYaw() * 256.0F / 360.0F));
+        teleport.getBytes().write(1, (byte) (location.getPitch() * 256.0F / 360.0F));
+        
+        // FIX: Check if the boolean field exists before writing
+        if (teleport.getBooleans().size() > 0) {
+            teleport.getBooleans().write(0, false); // onGround
+        }
+
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (onlinePlayer.equals(player)) continue;
+            if (!onlinePlayer.getWorld().equals(player.getWorld())) continue;
+            try {
+                pm.sendServerPacket(onlinePlayer, teleport);
+            } catch (Exception e) { e.printStackTrace(); }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }*/
+
+    public void sendEntityTeleportPacket(Player player, int entityId, Location location) {
+        double y = location.getY() - 0.2;
+        if (player.isSneaking()) {
+            y = location.getY() - 0.5;
+        }
+
+        PacketContainer packet = new PacketContainer(PacketType.Play.Server.ENTITY_TELEPORT);
+        packet.getIntegers().write(0, entityId);
+
+        try {
+            InternalStructure is = packet.getStructures().read(0);
+
+            is.getVectors()
+               .write(0, new Vector(location.getX(), y, location.getZ()))
+               .write(1, new Vector(0, 0, 0));
+
+            is.getFloat()
+               .write(0, location.getYaw());
+               
+            packet.getStructures().write(0, is);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ProtocolManager pm = ProtocolLibrary.getProtocolManager();
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (onlinePlayer.equals(player)) continue;
+            if (!onlinePlayer.getWorld().equals(player.getWorld())) continue;
+            try {
+                pm.sendServerPacket(onlinePlayer, packet);
+            } catch (Exception e) { e.printStackTrace(); }
+        }
+    }
 }
+
+
 
