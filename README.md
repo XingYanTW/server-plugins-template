@@ -1,25 +1,6 @@
-# 屎山代碼
+# Rewrite For the Modern Version
 
-# Requirement
-- SQLite
-
-# ToDo list
-- [ ] Config Files
-- [ ] Language Files
-- [ ] Skin cache
-- [ ] Sync Skin Grab
-- [ ] God Mode
-- [ ] Gamemode Command
-- [ ] Holograms
-- [X] Scoreboard Side Bar
-- [ ] Multiple Server Version Support
-- [ ] Multiple Client Version Support
-- [ ] NPC (May Not Do It
-- [ ] ~~Code Everything From Essentials~~
-
-# Command List
-- /setrank
-- /opme
+## current not working or untested
 - /kick
 - /ban
 - /unban
@@ -28,17 +9,6 @@
 - /nick
 - /unnick
 - /vanish
-- /fly
 
-# Event List
-- PlayerFirstJoin()
-- OverrideCommand()
-- BanCheck()
-- UPGRADEABLE_SWORD()
-- DeathMessage()
-- VanishCheck()
-- flycheck()
-- Weather()
-- JoinQuitMessage()
-- TabName()
-- Chat()
+## Required
+ProtocolLib
