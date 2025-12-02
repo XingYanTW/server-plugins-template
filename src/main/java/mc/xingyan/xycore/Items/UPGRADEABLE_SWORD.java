@@ -31,7 +31,7 @@ public class UPGRADEABLE_SWORD implements Listener {
                 item.setItemMeta(im);
                 break;
             case "GOLDEN":
-                item = new ItemStack(Material.GOLD_SWORD);
+                item = new ItemStack(Material.GOLDEN_SWORD);
                 im = item.getItemMeta();
                 lore = new ArrayList<>();
                 lore.add(ChatColor.YELLOW+"Next Upgrade:"+ChatColor.WHITE+" Iron Sword");
@@ -58,7 +58,7 @@ public class UPGRADEABLE_SWORD implements Listener {
                 item.setItemMeta(im);
                 break;
             default:
-                item = new ItemStack(Material.WOOD_SWORD);
+                item = new ItemStack(Material.WOODEN_SWORD);
                 im = item.getItemMeta();
                 lore = new ArrayList<>();
                 lore.add(ChatColor.YELLOW+"Next Upgrade:"+ChatColor.WHITE+" Stone Sword");
@@ -77,7 +77,7 @@ public class UPGRADEABLE_SWORD implements Listener {
         ItemStack item = player.getItemInHand();
 
         //swords
-        if(item.getType().equals(Material.WOOD_SWORD)){
+        if(item.getType().equals(Material.WOODEN_SWORD)){
             ItemMeta itemMeta = item.getItemMeta();
             List<String> lore = itemMeta.getLore();
             if(lore.get(0).equals(ChatColor.YELLOW+"Next Upgrade:"+ChatColor.WHITE+" Stone Sword")){
@@ -108,7 +108,7 @@ public class UPGRADEABLE_SWORD implements Listener {
                 int exp = Integer.parseInt(loreline2);
                 exp = exp + event.getAmount();
                 if(exp>=50){
-                    item.setType(Material.GOLD_SWORD);
+                    item.setType(Material.GOLDEN_SWORD);
                     lore.set(0, ChatColor.YELLOW+"Next Upgrade:"+ChatColor.WHITE+" Iron Sword");
                     exp = exp-50;
                     lore.set(1, ChatColor.YELLOW+"Need exp: ("+exp+"/80)");
@@ -123,7 +123,7 @@ public class UPGRADEABLE_SWORD implements Listener {
                 player.setItemInHand(item);
             }
         }
-        if(item.getType().equals(Material.GOLD_SWORD)){
+        if(item.getType().equals(Material.GOLDEN_SWORD)){
             ItemMeta itemMeta = item.getItemMeta();
             List<String> lore = itemMeta.getLore();
             if(lore.get(0).equals(ChatColor.YELLOW+"Next Upgrade:"+ChatColor.WHITE+" Iron Sword")){

@@ -113,21 +113,14 @@ public final class XyCore extends JavaPlugin {
                         PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.SYSTEM_CHAT);
                         packet.getStrings().write(0, "{\"text\":\"" + message + "\"}");
                         packet.getBooleans().write(0, true);
-                        try {
-                            protocolManager.sendServerPacket(player, packet);
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
-                        }
+                        protocolManager.sendServerPacket(player, packet);
+                        
                     }else{
                         String message = "You Are Current "+ChatColor.RED+"Vanished";
                         PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.SYSTEM_CHAT);
                         packet.getStrings().write(0, "{\"text\":\"" + message + "\"}");
                         packet.getBooleans().write(0, true);
-                        try {
-                            protocolManager.sendServerPacket(player, packet);
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
-                        }
+                        protocolManager.sendServerPacket(player, packet);
                     }
                 });
                 getNicked().forEach(player -> {
@@ -136,11 +129,7 @@ public final class XyCore extends JavaPlugin {
                         PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.SYSTEM_CHAT);
                         packet.getStrings().write(0, "{\"text\":\"" + message + "\"}");
                         packet.getBooleans().write(0, true);
-                        try {
-                            protocolManager.sendServerPacket(player, packet);
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
-                        }
+                        protocolManager.sendServerPacket(player, packet);
                     }
                 });
             }
