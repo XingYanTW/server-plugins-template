@@ -1,10 +1,9 @@
 package mc.xingyan.servercore.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import static mc.xingyan.servercore.RankManager.getRank;
 
@@ -21,11 +20,13 @@ public class OpMeCommand extends CoreCommand {
             if(getRank(player).equals("ADMIN")){
                 if(player.isOp()){
                     player.setOp(false);
-                    player.sendMessage(ChatColor.RED+ "You are no longer OP.");
+                    player.sendMessage(MiniMessage.miniMessage().deserialize("<red>You are no longer OP."));
                 }else{
                     player.setOp(true);
-                    player.sendMessage(ChatColor.GREEN+"You are now OP.");
+                    player.sendMessage(MiniMessage.miniMessage().deserialize("<green>You are now OP."));
                 }
+            }else{
+                player.sendMessage(MiniMessage.miniMessage().deserialize("<red>You are no longer OP."));
             }
         }
 

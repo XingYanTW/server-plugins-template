@@ -1,6 +1,5 @@
 package mc.xingyan.servercore.stasis;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.sql.PreparedStatement;
@@ -28,13 +27,13 @@ public class PlayerInfo {
         String rank = getRank(player);
         switch (rank){
             case "DEFAULT":
-                return ChatColor.GRAY+"";
+                return "<gray>";
             case "ADMIN":
-                return ChatColor.RED+"[ADMIN] ";
+                return "<red>[ADMIN] ";
             case "YOUTUBER":
-                return ChatColor.RED+"["+ChatColor.RESET+"Youtuber"+ChatColor.RED+"] ";
+                return "<red>[<reset>Youtuber<red>] ";
             case "MODERATOR":
-                return ChatColor.DARK_GREEN+"[MOD] ";
+                return "<dark_green>[MOD] ";
         }
         return rank;
     }
@@ -43,13 +42,13 @@ public class PlayerInfo {
         String rank = getRank(player);
         switch (rank){
             case "DEFAULT":
-                return ChatColor.GRAY+"Default";
+                return "<gray>Default";
             case "ADMIN":
-                return ChatColor.RED+"ADMIN";
+                return "<red>ADMIN";
             case "YOUTUBER":
-                return ChatColor.RESET+"YOUTUBER";
+                return "<reset>YOUTUBER";
             case "MODERATOR":
-                return ChatColor.DARK_GREEN+"MODERATOR";
+                return "<dark_green>MODERATOR";
         }
         return rank;
     }

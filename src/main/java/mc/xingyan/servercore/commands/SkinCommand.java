@@ -6,17 +6,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import mc.xingyan.servercore.ServerCore;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.PlayerInventory;
-import org.json.simple.JSONObject;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.charset.Charset;
 
 import static mc.xingyan.servercore.RankManager.getRank;
 
@@ -29,54 +26,54 @@ public class SkinCommand extends CoreCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            if(getRank(player).equals("YOUTUBER") || getRank(player).equals("MODERATOR") || getRank(player).equals("ADMIN")){
-                if (args.length >= 1) {
-                    if (args[0].equals("remove")) {
-
-                        String texture;
-                        String signature;
-
-                        try {
-                            URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/"+player.getUniqueId()+"?unsigned=false");
-                            InputStreamReader reader = new InputStreamReader(url.openStream());
-                            JsonObject property = new JsonParser().parse(reader).getAsJsonObject().get("properties").getAsJsonArray().get(0).getAsJsonObject();
-                            texture = property.get("value").getAsString();
-                            signature = property.get("signature").getAsString();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        changeSkin((Player) sender, texture, signature);
-
-                    }else{
-                        try {
-                            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/"+args[0]);
-                            InputStreamReader reader = new InputStreamReader(url.openStream());
-                            JsonObject json = new JsonParser().parse(reader).getAsJsonObject();
-                            String id = json.get("id").getAsString();
-                            String name = json.get("name").getAsString();
-                            URL url2 = new URL("https://sessionserver.mojang.com/session/minecraft/profile/"+id+"?unsigned=false");
-                            InputStreamReader reader2 = new InputStreamReader(url2.openStream());
-                            JsonObject property = new JsonParser().parse(reader2).getAsJsonObject().get("properties").getAsJsonArray().get(0).getAsJsonObject();
-                            String texture = property.get("value").getAsString();
-                            String signature = property.get("signature").getAsString();
-                            changeSkin((Player) sender, texture, signature);
-                            player.sendMessage(ChatColor.GREEN+"You has changed your skin to "+name);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                    }
-
-                } else {
-                    player.sendMessage(ChatColor.RED+"Usage: /skin <player_name>|remove");
-                }
-            }else{
-                sender.sendMessage(ChatColor.RED+"You Need YOUTUBER rank or higher to do this.");
-            }
+        if (!(sender instanceof Player)) {
             return true;
+        }
+        Player player = (Player) sender;
+        String rank = getRank(player);
+        if (!rank.equals("YOUTUBER") && !rank.equals("MODERATOR") && !rank.equals("ADMIN")) {
+            sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>You Need YOUTUBER rank or higher to do this."));
+            return true;
+        }
 
+        if (args.length < 1) {
+            player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Usage: /skin <player_name>|remove"));
+            return true;
+        }
+
+        if (args[0].equals("remove")) {
+            try {
+                JsonObject json = getJson("https://sessionserver.mojang.com/session/minecraft/profile/" + player.getUniqueId() + "?unsigned=false");
+                JsonObject property = json.get("properties").getAsJsonArray().get(0).getAsJsonObject();
+                String texture = property.get("value").getAsString();
+                String signature = property.get("signature").getAsString();
+                changeSkin(player, texture, signature);
+                player.sendMessage(MiniMessage.miniMessage().deserialize("<green>Skin reset to original."));
+            } catch (Exception e) {
+                player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Failed to reset skin: " + e.getMessage()));
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                JsonObject profileJson = getJson("https://api.mojang.com/users/profiles/minecraft/" + args[0]);
+                if (profileJson == null || !profileJson.has("id")) {
+                     player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Player not found."));
+                     return true;
+                }
+                String id = profileJson.get("id").getAsString();
+                String name = profileJson.get("name").getAsString();
+
+                JsonObject sessionJson = getJson("https://sessionserver.mojang.com/session/minecraft/profile/" + id + "?unsigned=false");
+                JsonObject property = sessionJson.get("properties").getAsJsonArray().get(0).getAsJsonObject();
+                String texture = property.get("value").getAsString();
+                String signature = property.get("signature").getAsString();
+                
+                changeSkin(player, texture, signature);
+                player.sendMessage(MiniMessage.miniMessage().deserialize("<green>You have changed your skin to " + name));
+            } catch (Exception e) {
+                player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Failed to change skin: " + e.getMessage()));
+                e.printStackTrace();
+            }
         }
         return true;
     }
@@ -95,41 +92,31 @@ public class SkinCommand extends CoreCommand {
         Location loc = player.getLocation();
         int food = player.getFoodLevel();
         double heal = player.getHealth();
-        PlayerInventory inv = player.getInventory();
+        
+        org.bukkit.inventory.ItemStack[] contents = player.getInventory().getContents();
+        org.bukkit.inventory.ItemStack[] armor = player.getInventory().getArmorContents();
+        
         player.getInventory().clear();
         player.setHealth(0D);
         player.spigot().respawn();
         player.teleport(loc);
-        player.getInventory().setContents(inv.getContents());
+        
+        player.getInventory().setContents(contents);
+        player.getInventory().setArmorContents(armor);
         player.setHealth(heal);
         player.setFoodLevel(food);
     }
 
-    private static String readAll(Reader rd) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        int cp;
-        while ((cp = rd.read()) != -1) {
-            sb.append((char) cp);
+    private JsonObject getJson(String urlString) throws IOException {
+        URL url = new URL(urlString);
+        java.net.HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+        connection.setConnectTimeout(5000);
+        connection.setReadTimeout(5000);
+        
+        try (InputStreamReader reader = new InputStreamReader(connection.getInputStream())) {
+            return new JsonParser().parse(reader).getAsJsonObject();
         }
-        return sb.toString();
-    }
-
-    public static JSONObject readJsonFromUrl(String url) throws IOException {
-        InputStream is = new URL(url).openStream();
-        try {
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-            String jsonText = readAll(rd);
-            JSONObject json = new JSONObject();
-            return json;
-        } finally {
-            is.close();
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        JSONObject json = readJsonFromUrl("https://graph.facebook.com/19292868552");
-        System.out.println(json.toString());
-        System.out.println(json.get("id"));
     }
 }
 

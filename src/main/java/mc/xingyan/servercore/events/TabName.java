@@ -10,6 +10,9 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedDataValue;
 import mc.xingyan.servercore.stasis.PlayerInfo;
 import mc.xingyan.servercore.ServerCore;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -72,11 +75,11 @@ public class TabName implements Listener {
 
         for (Player players : new ArrayList<>(Bukkit.getOnlinePlayers())) {
             if(players.equals(player)) continue;
-            sendSpawnPacket(protocolManager, players, player, entityId, prefix + player.getName());
+            sendSpawnPacket(protocolManager, players, player, entityId, LegacyComponentSerializer.legacySection().serialize(MiniMessage.miniMessage().deserialize(prefix)) + player.getName());
             
             if (armorStandMap.containsKey(players.getName())) {
                 int otherId = armorStandMap.get(players.getName());
-                sendSpawnPacket(protocolManager, player, players, otherId, PlayerInfo.getPrefix(players) + players.getName());
+                sendSpawnPacket(protocolManager, player, players, otherId, LegacyComponentSerializer.legacySection().serialize(MiniMessage.miniMessage().deserialize(PlayerInfo.getPrefix(players))) + players.getName());
             }
         }
 

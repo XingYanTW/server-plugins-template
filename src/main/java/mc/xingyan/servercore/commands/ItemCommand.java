@@ -1,15 +1,12 @@
 package mc.xingyan.servercore.commands;
 
 import mc.xingyan.servercore.items.UpgradeableSword;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Locale;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import static mc.xingyan.servercore.stasis.VowelConsonant.getArticle;
 import static mc.xingyan.servercore.RankManager.getRank;
@@ -28,7 +25,7 @@ public class ItemCommand extends CoreCommand {
             Player player = (Player) sender;
             if(getRank(player).equals("ADMIN")){
                 if (args.length == 0) {
-                    player.sendMessage(ChatColor.RED + "Usage: /item <item> [amount]");
+                    player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Usage: /item <item> [amount]"));
                     return true;
                 }
                 if (args.length >= 1) {
@@ -38,31 +35,31 @@ public class ItemCommand extends CoreCommand {
                         } else {
                             player.getInventory().addItem(new UpgradeableSword().get("WOODEN"));
                         }
-                        player.sendMessage(ChatColor.GREEN + "Gave "+player.getName()+" "+getArticle("UPGRADEABLE_SWORD")+" UPGRADEABLE_SWORD");
+                        player.sendMessage(MiniMessage.miniMessage().deserialize("<green>Gave "+player.getName()+" "+getArticle("UPGRADEABLE_SWORD")+" UPGRADEABLE_SWORD"));
                         return true;
                     }
                     if(args.length>=2){
                         try{
                             Integer.parseInt(args[1]);
                         }catch (NumberFormatException e){
-                            player.sendMessage(ChatColor.RED+"Unknown Number.");
+                            player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Unknown Number."));
                             return true;
                         }
                         if(Material.getMaterial(args[0].toUpperCase())!=null){
                             ItemStack item = new ItemStack(Material.getMaterial(args[0].toUpperCase()));
                             item.setAmount(Integer.parseInt(args[1]));
                             player.getInventory().addItem(item);
-                            player.sendMessage(ChatColor.GREEN + "Gave "+player.getName()+" "+getArticle(args[0].toUpperCase())+" "+args[0].toUpperCase()+"x"+args[1]);
+                            player.sendMessage(MiniMessage.miniMessage().deserialize("<green>Gave "+player.getName()+" "+getArticle(args[0].toUpperCase())+" "+args[0].toUpperCase()+"x"+args[1]));
                         }else{
-                            player.sendMessage(ChatColor.RED+"Not Found Item "+args[0].toUpperCase());
+                            player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Not Found Item "+args[0].toUpperCase()));
                         }
                         return true;
                     }else{
                         if(Material.getMaterial(args[0].toUpperCase())!=null){
                             player.getInventory().addItem(new ItemStack(Material.getMaterial(args[0].toUpperCase())));
-                            player.sendMessage(ChatColor.GREEN + "Gave "+player.getName()+" "+getArticle(args[0].toUpperCase())+" "+args[0].toUpperCase());
+                            player.sendMessage(MiniMessage.miniMessage().deserialize("<green>Gave "+player.getName()+" "+getArticle(args[0].toUpperCase())+" "+args[0].toUpperCase()));
                         }else{
-                            player.sendMessage(ChatColor.RED+"Not Found Item "+args[0].toUpperCase());
+                            player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Not Found Item "+args[0].toUpperCase()));
                         }
                         return true;
                     }
@@ -71,7 +68,7 @@ public class ItemCommand extends CoreCommand {
                     return true;
                 }
             }else{
-                sender.sendMessage(ChatColor.RED+"You don't have permission to run that command!");
+                sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>You don't have permission to run that command!"));
             }
         }
         return true;

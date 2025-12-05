@@ -9,6 +9,9 @@ import mc.xingyan.servercore.commands.*;
 import mc.xingyan.servercore.events.*;
 import mc.xingyan.servercore.items.UpgradeableSword;
 import mc.xingyan.servercore.tabcomplete.ItemTabCompleter;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
@@ -19,6 +22,7 @@ import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import java.awt.*;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -83,13 +87,13 @@ public final class ServerCore extends JavaPlugin {
         registerEvents(
                 new PlayerFirstJoin(),
                 new OverrideCommand(),
-                new BanCheck(),
                 new UpgradeableSword(),
                 new DeathMessage(),
                 new VanishCheck(),
                 new FlyCheck(),
                 new Weather(),
                 new JoinQuitMessage(),
+                new BanCheck(),
                 new TabName(),
                 new Chat(),
                 new ScoreBoard(),
@@ -107,7 +111,6 @@ public final class ServerCore extends JavaPlugin {
         registerCommand(new UnnickCommand());
         registerCommand(new VanishCommand());
         registerCommand(new FlyCommand());
-        registerCommand(new TestCommand());
         registerCommand(new LightningStickCommand());
 
         this.getCommand("item").setTabCompleter(new ItemTabCompleter());
@@ -116,28 +119,23 @@ public final class ServerCore extends JavaPlugin {
             @Override
             public void run() {
                 getVanish().forEach(player -> {
+                    Component message;
                     if(getNicked().contains(player)){
-                        String message = "You Are Current "+ChatColor.RED+"Vanished"+ChatColor.RESET+", "+ChatColor.RED+"Nicked";
-                        PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.SYSTEM_CHAT);
-                        packet.getStrings().write(0, "{\"text\":\"" + message + "\"}");
-                        packet.getBooleans().write(0, true);
-                        protocolManager.sendServerPacket(player, packet);
-                        
+                        message = Component.text("You Are Current ")
+                                .append(Component.text("Vanished").color((TextColor) Color.RED))
+                                .append(Component.text(", "))
+                                .append(Component.text("Nicked").color((TextColor) Color.RED));
                     }else{
-                        String message = "You Are Current "+ChatColor.RED+"Vanished";
-                        PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.SYSTEM_CHAT);
-                        packet.getStrings().write(0, "{\"text\":\"" + message + "\"}");
-                        packet.getBooleans().write(0, true);
-                        protocolManager.sendServerPacket(player, packet);
+                        message = Component.text("You Are Current ")
+                                .append(Component.text("Vanished").color((TextColor) Color.RED));
                     }
+                    player.sendActionBar(message);
                 });
                 getNicked().forEach(player -> {
                     if(!getVanish().contains(player)){
-                        String message = "You Are Current "+ChatColor.RED+"Nicked";
-                        PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.SYSTEM_CHAT);
-                        packet.getStrings().write(0, "{\"text\":\"" + message + "\"}");
-                        packet.getBooleans().write(0, true);
-                        protocolManager.sendServerPacket(player, packet);
+                        Component message = Component.text("You Are Current ")
+                                .append(Component.text("Vanished").color((TextColor) Color.RED));
+                        player.sendActionBar(message);
                     }
                 });
             }

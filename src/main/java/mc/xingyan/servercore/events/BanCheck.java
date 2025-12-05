@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,16 +17,16 @@ public class BanCheck implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
         if(checkban(event.getPlayer())){
-            event.getPlayer().kickPlayer(getBannedReason(event.getPlayer()));
-            event.setJoinMessage("");
+            event.getPlayer().kick(MiniMessage.miniMessage().deserialize(getBannedReason(event.getPlayer())));
+            event.joinMessage(null);
         }
     }
 
     @EventHandler
     public void onLeft(PlayerQuitEvent event){
         if(checkban(event.getPlayer())){
-            event.getPlayer().kickPlayer(getBannedReason(event.getPlayer()));
-            event.setQuitMessage("");
+            event.getPlayer().kick(MiniMessage.miniMessage().deserialize(getBannedReason(event.getPlayer())));
+            event.quitMessage(null);
         }
     }
 

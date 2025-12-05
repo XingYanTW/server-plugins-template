@@ -10,7 +10,7 @@ public class DeathMessage implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event){
-        event.setDeathMessage("");
+        event.deathMessage(null);
     }
 
 }

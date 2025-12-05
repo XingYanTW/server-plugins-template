@@ -1,8 +1,7 @@
 package mc.xingyan.servercore.commands;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -26,12 +25,12 @@ public class UnbanCommand extends CoreCommand {
             if(args.length>=1){
                 if(checkban(args[0])){
                     removeban(args[0]);
-                    System.out.println(ChatColor.GREEN+"Successful Unbanned Player!");
+                    sender.sendMessage(MiniMessage.miniMessage().deserialize("<green>Successful Unbanned Player!"));
                 }else{
-                    System.out.println(ChatColor.RED+"Player Not Found.");
+                    sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>Player Not Found."));
                 }
             } else {
-                sender.sendMessage(ChatColor.RED+"Usage: /unban <player>");
+                sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>Usage: /unban <player>"));
             }
         }
         if(sender instanceof Player) {
@@ -40,12 +39,12 @@ public class UnbanCommand extends CoreCommand {
                 if(args.length>=1){
                     if(checkban(args[0])){
                         removeban(args[0]);
-                        player.sendMessage(ChatColor.GREEN+"Successful Unbanned Player!");
+                        player.sendMessage(MiniMessage.miniMessage().deserialize("<green>Successful Unbanned Player!"));
                     }else{
-                        player.sendMessage(ChatColor.RED+"Player Not Found.");
+                        player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Player Not Found."));
                     }
                 } else {
-                    player.sendMessage(ChatColor.RED+"Usage: /unban <player>");
+                    player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Usage: /unban <player>"));
                 }
             }
         }

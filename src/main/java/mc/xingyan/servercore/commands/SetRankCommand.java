@@ -1,12 +1,11 @@
 package mc.xingyan.servercore.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,8 +31,8 @@ public class SetRankCommand extends CoreCommand {
                             statement.setString(2, player.getUniqueId().toString());
                             int rows = statement.executeUpdate();
                             if (rows > 0) {
-                                player.sendMessage(ChatColor.GREEN+"You Are Now "+args[1].toUpperCase(Locale.ROOT));
-                                sender.sendMessage(ChatColor.GREEN+"Successful Set "+player.getName()+"'s Rank to "+ args[1].toUpperCase(Locale.ROOT));
+                                player.sendMessage(MiniMessage.miniMessage().deserialize("<green>You Are Now "+args[1].toUpperCase(Locale.ROOT)));
+                                sender.sendMessage(MiniMessage.miniMessage().deserialize("<green>Successful Set "+player.getName()+"'s Rank to "+ args[1].toUpperCase(Locale.ROOT)));
                             } else {
                                 // If not found, maybe insert? Or just say not found. The original code only updated if found.
                                 // But usually setrank should work even if not found (insert).
@@ -52,13 +51,13 @@ public class SetRankCommand extends CoreCommand {
                             e.printStackTrace();
                         }
                     }else{
-                        sender.sendMessage(ChatColor.RED+"Rank Not Found!");
+                        sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>Rank Not Found!"));
                     }
                 } else {
-                    sender.sendMessage(ChatColor.RED+"Player Not Found!");
+                    sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>Player Not Found!"));
                 }
             } else {
-                sender.sendMessage(ChatColor.RED+"Usage: /setrank <player> <rank>");
+                sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>Usage: /setrank <player> <rank>"));
             }
 
         }
@@ -77,20 +76,20 @@ public class SetRankCommand extends CoreCommand {
                                             updateStmt.setString(1, args[1].toUpperCase(Locale.ROOT));
                                             updateStmt.setString(2, player.getUniqueId().toString());
                                             updateStmt.executeUpdate();
-                                            player.sendMessage(ChatColor.GREEN+"You Are Now "+args[1].toUpperCase(Locale.ROOT));
-                                            p.sendMessage(ChatColor.GREEN+"Successful Set "+player.getName()+"'s Rank to "+ args[1].toUpperCase(Locale.ROOT));
+                                            player.sendMessage(MiniMessage.miniMessage().deserialize("<green>You Are Now "+args[1].toUpperCase(Locale.ROOT)));
+                                            p.sendMessage(MiniMessage.miniMessage().deserialize("<green>Successful Set "+player.getName()+"'s Rank to "+ args[1].toUpperCase(Locale.ROOT)));
                                         }
                                     }else{
-                                        sender.sendMessage(ChatColor.RED+"Rank Not Found!");
+                                        sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>Rank Not Found!"));
                                     }
                                 } else {
-                                    sender.sendMessage(ChatColor.RED+"Player Not Found!");
+                                    sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>Player Not Found!"));
                                 }
                             } else {
-                                sender.sendMessage(ChatColor.RED+"Usage: /setrank <player> <rank>");
+                                sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>Usage: /setrank <player> <rank>"));
                             }
                         }else{
-                            sender.sendMessage(ChatColor.RED+"You don't have permission to run that command!");
+                            sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>You don't have permission to run that command!"));
                         }
                     }
                 }

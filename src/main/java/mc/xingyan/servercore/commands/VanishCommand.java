@@ -2,11 +2,10 @@ package mc.xingyan.servercore.commands;
 
 import mc.xingyan.servercore.ServerCore;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import static mc.xingyan.servercore.RankManager.getRank;
 
@@ -24,20 +23,20 @@ public class VanishCommand extends CoreCommand {
                 if(!ServerCore.getVanish().contains(player)){
                     Bukkit.getOnlinePlayers().forEach(p->{
                         if(getRank(p).equals("DEFAULT")){
-                            p.hidePlayer(player);
+                            p.hidePlayer(ServerCore.getPlugin(), player);
                         }
                     });
                     ServerCore.getVanish().add(player);
-                    player.sendMessage(ChatColor.GREEN+"You Are Now Vanish From Other Player.");
+                    player.sendMessage(MiniMessage.miniMessage().deserialize("<green>You Are Now Vanish From Other Player."));
                 }else{
                     Bukkit.getOnlinePlayers().forEach(p->{
-                        p.showPlayer(player);
+                        p.showPlayer(ServerCore.getPlugin(), player);
                     });
                     ServerCore.getVanish().remove(player);
-                    player.sendMessage(ChatColor.GREEN+"You Are Now Visible From Other Player.");
+                    player.sendMessage(MiniMessage.miniMessage().deserialize("<green>You Are Now Visible From Other Player."));
                 }
             }else{
-                sender.sendMessage(ChatColor.RED+"You Need YOUTUBER rank or higher to do this.");
+                sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>You Need YOUTUBER rank or higher to do this."));
             }
 
         }

@@ -6,7 +6,6 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import mc.xingyan.servercore.stasis.PlayerInfo;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -19,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.util.Set;
 import java.util.UUID;
@@ -38,7 +38,7 @@ public class LightningStickCommand extends CoreCommand implements Listener {
             if(PlayerInfo.getRank(player).equals("ADMIN")){
                 ItemStack is = new ItemStack(Material.STICK);
                 ItemMeta im = is.getItemMeta();
-                im.setDisplayName(ChatColor.YELLOW+"Lightning Stick");
+                im.displayName(MiniMessage.miniMessage().deserialize("<yellow>Lightning Stick"));
                 is.setItemMeta(im);
                 player.getInventory().addItem(is);
             }
@@ -56,7 +56,7 @@ public class LightningStickCommand extends CoreCommand implements Listener {
 
         Player player = event.getPlayer();
         Location loc = player.getTargetBlock((Set<Material>) null, 100).getLocation();
-        if(is.getType().equals(Material.STICK) && is.getItemMeta().getDisplayName().equals(ChatColor.YELLOW+"Lightning Stick")){
+        if(is.getType().equals(Material.STICK) && is.getItemMeta().displayName().equals(MiniMessage.miniMessage().deserialize("<yellow>Lightning Stick"))){
             ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
             
             Bukkit.getOnlinePlayers().forEach(players->{

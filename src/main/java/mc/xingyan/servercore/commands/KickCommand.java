@@ -1,12 +1,11 @@
 package mc.xingyan.servercore.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -35,18 +34,20 @@ public class KickCommand extends CoreCommand {
                             for(int i=1; i<=args.length-1; i++){
                                 reason += args[i] + " ";
                             }
-                            target.kickPlayer(ChatColor.translateAlternateColorCodes('&', ChatColor.RED+"You has been kicked from this server!\n\n"+ChatColor.GRAY+"Reason: "+ChatColor.WHITE+reason+"\n\n"+ChatColor.GRAY+sdf.format(timestamp)));
-                            Bukkit.getServer().broadcastMessage(ChatColor.RED+""+ChatColor.BOLD+"[Notify] "+target.getName()+" Has Been Kicked by Moderator. Reason: "+ChatColor.RESET+reason);
+                            String kickMsg = "<red>You has been kicked from this server!\n\n<gray>Reason: <white>" + reason + "\n\n<gray>" + sdf.format(timestamp);
+                            target.kick(MiniMessage.miniMessage().deserialize(kickMsg));
+                            Bukkit.getServer().broadcast(MiniMessage.miniMessage().deserialize("<red><bold>[Notify] " + target.getName() + " Has Been Kicked by Moderator. Reason: <reset>" + reason));
                         }else{
-                            target.kickPlayer(ChatColor.RED+"You has been kicked from this server!\n\n"+ChatColor.GRAY+"Reason: "+ChatColor.WHITE+"Kicked\n\n"+ChatColor.GRAY+sdf.format(timestamp));
-                            Bukkit.getServer().broadcastMessage(ChatColor.RED+""+ChatColor.BOLD+"[Notify] "+target.getName()+" Has Been Kicked by Moderator. Reason: "+ChatColor.RESET+"Kicked");
+                            String kickMsg = "<red>You has been kicked from this server!\n\n<gray>Reason: <white>Kicked\n\n<gray>" + sdf.format(timestamp);
+                            target.kick(MiniMessage.miniMessage().deserialize(kickMsg));
+                            Bukkit.getServer().broadcast(MiniMessage.miniMessage().deserialize("<red><bold>[Notify] " + target.getName() + " Has Been Kicked by Moderator. Reason: <reset>Kicked"));
                         }
                     }
                 }else{
-                    player.sendMessage(ChatColor.RED+"Usage: /kick <player> [<reason>]");
+                    player.sendMessage(MiniMessage.miniMessage().deserialize("<red>Usage: /kick <player> [<reason>]"));
                 }
             }else {
-                sender.sendMessage(ChatColor.RED+"You don't have permission to run that command!");
+                sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>You don't have permission to run that command!"));
             }
         }
         if(sender instanceof ConsoleCommandSender){
@@ -58,15 +59,17 @@ public class KickCommand extends CoreCommand {
                         for(int i=1; i<=args.length-1; i++){
                             reason += args[i] + " ";
                         }
-                        target.kickPlayer(ChatColor.translateAlternateColorCodes('&', ChatColor.RED+"You has been kicked from this server!\n\n"+ChatColor.GRAY+"Reason: "+ChatColor.WHITE+reason+"\n\n"+ChatColor.GRAY+sdf.format(timestamp)));
-                        Bukkit.getServer().broadcastMessage(ChatColor.RED+""+ChatColor.BOLD+"[Notify] "+target.getName()+" Has Been Kicked by Console. Reason: "+ChatColor.RESET+reason);
+                        String kickMsg = "<red>You has been kicked from this server!\n\n<gray>Reason: <white>" + reason + "\n\n<gray>" + sdf.format(timestamp);
+                        target.kick(MiniMessage.miniMessage().deserialize(kickMsg));
+                        Bukkit.getServer().broadcast(MiniMessage.miniMessage().deserialize("<red><bold>[Notify] " + target.getName() + " Has Been Kicked by Console. Reason: <reset>" + reason));
                     }else{
-                        target.kickPlayer(ChatColor.RED+"You has been kicked from this server!\n\n"+ChatColor.GRAY+"Reason: "+ChatColor.WHITE+"Kicked\n\n"+ChatColor.GRAY+sdf.format(timestamp));
-                        Bukkit.getServer().broadcastMessage(ChatColor.RED+""+ChatColor.BOLD+"[Notify] "+target.getName()+" Has Been Kicked by Console. Reason: "+ChatColor.RESET+"Kicked");
+                        String kickMsg = "<red>You have been kicked from this server!\n\n<gray>Reason: <white>Kicked\n\n<gray>" + sdf.format(timestamp);
+                        target.kick(MiniMessage.miniMessage().deserialize(kickMsg));
+                        Bukkit.getServer().broadcast(MiniMessage.miniMessage().deserialize("<red><bold>[Notify] " + target.getName() + " Has Been Kicked by Console. Reason: <reset>Kicked"));
                     }
                 }
             }else{
-                sender.sendMessage(ChatColor.RED+"Usage: /kick <player> [<reason>]");
+                sender.sendMessage(MiniMessage.miniMessage().deserialize("<red>Usage: /kick <player> [<reason>]"));
             }
         }
         return true;
